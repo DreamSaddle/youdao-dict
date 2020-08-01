@@ -2,7 +2,7 @@
 
 **Youdao Dict** 是一个使用 `Rust` + `Qt` 开发的防<u>有道词典</u>的**翻译** + **词典** 工具.
 
-此软件所用到的Api为 <a href="http://fanyi.youdao.com/" target="_blank">有道翻译Api</a>.
+此软件所用到的Api为 [有道翻译Api](http://fanyi.youdao.com/?_blank).
 
 
 
