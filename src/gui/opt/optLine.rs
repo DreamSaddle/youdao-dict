@@ -11,15 +11,18 @@ use qt_gui::{QKeySequence};
 
 use regex::Regex;
 
-use crate::gui::text::transText::{TransText};
+use crate::gui::{
+    startQt::MainWindowWidgets,
+    text::transText::{TransText},
+    result::transResult::{TransResult},
+};
 
 
 #[derive(Debug)]
 pub struct OptLine {
     pub widget: QBox<QWidget>,
     pub langSelect: QBox<QComboBox>,
-    pub transBtn: QBox<QPushButton>,
-    pub transText: Rc<TransText>,
+    pub transBtn: QBox<QPushButton>
 }
 
 impl StaticUpcast<QObject> for OptLine {
@@ -29,7 +32,7 @@ impl StaticUpcast<QObject> for OptLine {
 }
 
 impl OptLine {
-    pub fn new(vBox: &QVBoxLayout, transText: &Rc<TransText>) -> Rc<Self> {
+    pub fn new(vBox: &QVBoxLayout) -> Rc<Self> {
         unsafe {
             let vBoxWidget = QWidget::new_0a();
             let line = QHBoxLayout::new_1a(&vBoxWidget);
@@ -55,54 +58,61 @@ impl OptLine {
             let this = Rc::new(OptLine {
                 widget: vBoxWidget,
                 langSelect: langSelect,
-                transBtn: transBtn,
-                transText: transText.clone()
+                transBtn: transBtn
             });
 
-            this.init();
             this
         }
     }
     
 
-    unsafe fn init(self: &Rc<Self>) {
-        // self.transBtn.clicked().connect(&SlotNoArgs::new(&self.transBtn, move || {
-        //     println!("fsdafsd");
-        // }));
-        //这种方式定义插槽, 比如让 OptLine 有足够长的生命周期, 否则插槽不会被触发
-        self.transBtn.clicked().connect(&self.slot_on_trans_btn_clicked());
+    ///
+    /// 插槽初始化 
+    /// 
+    pub unsafe fn init_slots(mww: &Rc<MainWindowWidgets>) {
+        mww.optLine.init(mww);
+    }
 
-        self.trans_shotcut_bind();
+
+    unsafe fn init(self: &Rc<Self>, mww: &Rc<MainWindowWidgets>) {
+        //搜索按钮点击
+        let _mww = mww.clone();
+        let _transText = mww.transText.clone();
+        let _transResult = mww.transResult.clone();
+        self.transBtn.clicked().connect(&SlotNoArgs::new(&self.transBtn, move || {
+            TransText::do_trans(&_transText, &_mww);
+        }));
+
+        //输入框文本变化
+        // transText.sourceEdit.text_changed().connect(&self.slot_on_source_edit_text_changed());
+
+        //翻译快捷键绑定
+        self.trans_shotcut_bind(&mww.transText, mww);
     }
     
 
     ///
     /// 翻译快捷键绑定
     /// 
-    unsafe fn trans_shotcut_bind(self: &Rc<Self>) {
+    unsafe fn trans_shotcut_bind(self: &Rc<Self>, transText: &Rc<TransText>, mww: &Rc<MainWindowWidgets>) {
         let enterKey = QKeySequence::from_q_string(&qs("ctrl+return"));
         let transBtnShotcut = QShortcut::new_2a(&enterKey, &self.transBtn);
         transBtnShotcut.set_context(ShortcutContext::ApplicationShortcut);
-        transBtnShotcut.activated().connect(&self.slot_on_trans_btn_clicked());
-    }
-
-
-    ///
-    /// 执行翻译插槽回调
-    /// 
-    #[slot(SlotNoArgs)]
-    unsafe fn on_trans_btn_clicked(self: &Rc<Self>) {
-        TransText::do_trans(&self.transText);
+        let _transText = transText.clone();
+        let _mww = mww.clone();
+        transBtnShotcut.activated().connect(&SlotNoArgs::new(&self.transBtn, move || {
+            TransText::do_trans(&_transText, &_mww);
+        }));
     }
 
 
     ///
     /// 翻译词输入后切换对于翻译类型
     /// 
-    pub unsafe fn slot_change_lang_select_actived(self: &Rc<Self>) {
+    pub unsafe fn on_change_lang_select_actived(self: &Rc<Self>, transText: &Rc<TransText>) {
+        let source = &transText.sourceEdit.to_plain_text().to_std_string();
         let regex = Regex::new(r#"[\u4e00-\u9fa5]"#).unwrap();
-        let w = self.transText.sourceEdit.to_plain_text().to_std_string();
-        if regex.is_match(&w) {
+        if regex.is_match(source) {
             self.langSelect.set_current_index(0);
         } else {
             self.langSelect.set_current_index(1);

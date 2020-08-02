@@ -1,3 +1,9 @@
+
+///
+/// 英译中API响应结果
+/// 
+/// 
+
 use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Debug)]

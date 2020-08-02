@@ -5,6 +5,8 @@ use cpp_core::{NullPtr, Ptr, StaticUpcast};
 use qt_core::{QCoreApplication, QPtr,qs, SlotNoArgs, QBox, QObject, slot};
 use qt_widgets::{QMainWindow, QMenuBar, QMenu, QAction};
 
+use crate::gui::about::About;
+
 pub struct AppMenu {
     mw: Ptr<QMainWindow>,
     pub helpAction: QBox<QAction>,
@@ -51,11 +53,18 @@ impl AppMenu {
 
 
     unsafe fn init(self: &Rc<Self>) {
+        //关于
+        self.aboutAction.triggered().connect(&self.slot_on_help_action_triggered());
 
         //退出程序
         self.exitAction.triggered().connect(&self.slot_on_exit_action_triggered());
     }
 
+
+    #[slot(SlotNoArgs)]
+    unsafe fn on_help_action_triggered(self: &Rc<Self>) {
+        About::show(self.mw);
+    }
 
     #[slot(SlotNoArgs)]
     unsafe fn on_exit_action_triggered(self: &Rc<Self>) {

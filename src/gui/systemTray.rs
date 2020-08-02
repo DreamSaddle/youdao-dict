@@ -6,6 +6,8 @@ use qt_core::{QCoreApplication, qs, SlotNoArgs, QBox, QPtr, slot, QObject};
 use qt_widgets::{QMainWindow, QAction, QMenu, QSystemTrayIcon, SlotOfActivationReason, q_system_tray_icon::ActivationReason};
 use qt_gui::{QIcon};
 
+use crate::gui::about::About;
+
 
 pub struct SystemTray {
     mw: Ptr<QMainWindow>,
@@ -26,16 +28,16 @@ impl StaticUpcast<QObject> for SystemTray {
 impl SystemTray {
     pub fn new(mw: Ptr<QMainWindow>) -> Rc<Self> {
         unsafe {
-            let icon = QIcon::from_q_string(&qs("/usr/share/icons/hicolor/scalable/apps/tray_icon.png"));
+            let icon = QIcon::from_q_string(&qs("./media/tray_icon.png"));
             let trayIcon = QSystemTrayIcon::new();
             trayIcon.set_icon(&icon);
             trayIcon.set_tool_tip(&qs("Youdao Dict"));
             trayIcon.show();
 
-            let action = QAction::from_q_string(&qs("帮助"));
+            let action = QAction::from_q_string(&qs("关于"));
 
             let menu = QMenu::new();
-            let help_action = menu.add_action_q_string(&qs("帮助"));
+            let help_action = menu.add_action_q_string(&qs("关于"));
             menu.add_separator();
             let exit_action = menu.add_action_q_string(&qs("退出"));
 
@@ -91,7 +93,7 @@ impl SystemTray {
 
     #[slot(SlotNoArgs)]
     unsafe fn on_help_action_triggered(self: &Rc<Self>) {
-        println!("help action triggered...");
+        About::show(self.mw);
     }
 
 
