@@ -21,8 +21,7 @@
     </a>
 </p>
 
-
-#  Youdao Dict
+# Youdao Dict
 
 **Youdao Dict** 是一个使用 `Rust` + `Qt` 开发的仿<u>有道词典</u>的**翻译** + **词典** 工具.
 
@@ -64,7 +63,7 @@ tar -zxvf youdao-dict-0.2.tar.gz
 
 
 
-# Usage
+## Usage
 
 输入框输入待翻译的词汇点击翻译按钮接口完成翻译.
 
@@ -76,7 +75,7 @@ tar -zxvf youdao-dict-0.2.tar.gz
 
 
 
-# Development
+## Development
 
 建议开发使用`Linux`桌面环境开发. **此项目也只提供Linux版本Release**.
 
