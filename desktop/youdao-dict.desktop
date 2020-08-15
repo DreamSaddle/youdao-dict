@@ -1,8 +1,8 @@
 [Desktop Entry]
-Version=0.1
+Version=0.0
 Name=Youdao Dict
 Comment=Yodao Dict Linux Clone, Use Youdao Api.
 Exec=youdao-dict
-Icon=/usr/share/icons/hicolor/scalable/apps/youdao-dict-logo.png
+Icon=/usr/share/icons/hicolor/scalable/apps/youdao-dict-desktop.png
 Type=Application
-Categories=Office;
+Categories=Utility;

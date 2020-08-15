@@ -15,3 +15,11 @@ pub mod engConciseInfo;
 /// 中文 转 英文
 /// 
 pub mod zhConciseInfo;
+
+pub mod webTrans;
+
+///
+/// 
+/// 网络释义
+/// 
+pub mod networkParaphrase;

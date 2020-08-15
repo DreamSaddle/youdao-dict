@@ -29,7 +29,7 @@ impl About {
             project_repo.set_open_external_links(true);
             vbox.add_widget(&project_repo);
 
-            let app_desc_label = QLabel::from_q_string(&qs("此应用使用 Rust+Qt 开发而成, 翻译接口使用<a href='http://fanyi.youdao.com/'>有道翻译Api</a><br/>本项目作为学习使用, 目前Rust+Qt资料相当少!"));
+            let app_desc_label = QLabel::from_q_string(&qs("此应用使用 Rust+Qt 开发而成, 翻译接口使用<a href='http://fanyi.youdao.com/'>有道翻译Api</a><br/>本项目作为学习使用, 欢迎前往GITHUB查看详情!"));
             app_desc_label.set_style_sheet(&qs("font-size:12px;"));
             app_desc_label.set_alignment(QFlags::from(AlignmentFlag::AlignTop));
             app_desc_label.set_open_external_links(true);

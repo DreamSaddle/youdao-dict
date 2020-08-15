@@ -4,6 +4,7 @@ use std::rc::Rc;
 use cpp_core::{Ptr, StaticUpcast};
 use qt_core::{qs, QBox, QObject};
 use qt_widgets::{QApplication, QWidget, QMainWindow, QVBoxLayout, q_box_layout::Direction, QScrollArea};
+use qt_gui::{QIcon};
 
 use crate::gui::{
     systemTray::SystemTray,
@@ -52,6 +53,8 @@ impl StartQt {
                 sa.resize_1a(&mainWindow.size());
                 windowWidget.resize_1a(&mainWindow.size());
                 mainWindow.set_window_title(&qs("Youdao Dict"));
+                let icon = QIcon::from_q_string(&qs("/usr/share/icons/hicolor/scalable/apps/youdao-dict-desktop.png"));
+                mainWindow.set_window_icon(&icon);
                 mainWindow.show();
                 let this = Rc::new(StartQt{
                     mw: mainWindow,

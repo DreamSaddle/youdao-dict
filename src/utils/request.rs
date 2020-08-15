@@ -22,6 +22,29 @@ pub fn do_concise_get(q: &String) -> String {
     result.to_string()
 }
 
+
+///
+/// 更全面的查询
+/// 
+pub fn do_full_get(q: &String) -> String {
+    let mut url = String::from("http://dict.youdao.com/jsonapi?jsonversion=2&q=");
+    url.push_str(q);
+    url.push_str(r#"&keyfrom=deskdict.main&dogVersion=1.0&dogui=json&client=deskdict&id=4af70ada38270b604&vendor=webdict_default&in=YoudaoDict_webdict_default&appVer=8.9.3.0&appZengqiang=0&abTest=2&model=LENOVO&screen=1920*1080&le=eng&dicts="#);
+    let dicts = String::from(r#"{"count":21,"dicts":[["oxfordAdvance","oxford","splongman","longman","webster","collins","collins_part","ec21","ce_new","hh","newhh","newcenturyjc"],["web_search"],["web_trans"],["special"],["ee"],["phrs"],["syno"],["rel_word"],["etym"],["typos"],["blng_sents_part","media_sents_part","auth_sents_part"],["fanyi"]]}"#);
+    //对dicts参数进行编码, 如果不编码会出现400 bad request
+    let dicts_encoded = url::form_urlencoded::Serializer::new(String::new()).append_pair("dicts", &dicts).finish();
+    // println!("编码参数: {}", dicts_encoded);
+    url.push_str(&dicts_encoded);
+
+    let r = futures::executor::block_on(do_get(&url));
+    let result = match &r {
+        String => r.ok().unwrap(),
+        Error => "".to_string(),
+    };
+
+    result.to_string()
+}
+
 async fn do_get(url: &String) -> Result<String, reqwest::Error> {
     // println!("请求地址: {}", url);
     let client: reqwest::Client = reqwest::Client::builder()

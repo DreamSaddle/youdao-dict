@@ -1,25 +1,29 @@
 <p align="center">
     <a href="https://www.rust-lang.org" target="_blank">
-    <img src="https://img.shields.io/badge/-Rust v1.45-ef5285" alt="Release"/>
+    <img src="https://img.shields.io/badge/-Rust v1.45-ef5285" alt="RUST"/>
+    </a>
+    <a href="https://doc.qt.io/" target="_blank">
+    <img src="https://img.shields.io/badge/-Qt5 or higher-379392" alt="Qt5 or higher"/>
     </a>
     <a href="https://github.com/rust-qt" target="_blank">
-    <img src="https://img.shields.io/badge/-Rust Qt v0.5.0-7200da" alt="Release"/>
+    <img src="https://img.shields.io/badge/-Rust Qt v0.5.0-7200da" alt="RUST-QT"/>
     </a>
 </p>
 <p align="center">
     <a href="https://github.com/DreamSaddle/youdao-dict/releases">
-    <img src="https://img.shields.io/github/v/release/DreamSaddle/youdao-dict?style=badge&color=58C9B9" alt="Release"/>
+    <img src="https://img.shields.io/github/v/release/DreamSaddle/youdao-dict?style=badge&color=58C9B9" alt="RELEASE"/>
     </a>
     <a href="https://github.com/DreamSaddle/youdao-dict/commits/master">
-    <img src="https://img.shields.io/github/last-commit/DreamSaddle/youdao-dict?style=badge&color=30A9DE" alt="Last Commit"/>
+    <img src="https://img.shields.io/github/last-commit/DreamSaddle/youdao-dict?style=badge&color=30A9DE" alt="LAST COMMIT"/>
     </a>
     <a href="https://github.com/DreamSaddle/youdao-dict/issues">
-    <img src="https://img.shields.io/github/issues/DreamSaddle/youdao-dict?style=badge&color=E71D36" alt="Last Commit"/>
+    <img src="https://img.shields.io/github/issues/DreamSaddle/youdao-dict?style=badge&color=E71D36" alt="ISSUES"/>
     </a>
     <a href="https://github.com/DreamSaddle/youdao-dict/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/DreamSaddle/youdao-dict?style=badge&color=EFDC05" alt="Last Commit"/>
+    <img src="https://img.shields.io/github/license/DreamSaddle/youdao-dict?style=badge&color=EFDC05" alt="LICENSE"/>
     </a>
 </p>
+
 
 # Youdao Dict
 
@@ -29,12 +33,11 @@
 
 
 
-## New In 0.2.0
+## New In 0.2.1
 
-+ UI稍作更新
-+ 中英互译基础完成
-+ 翻译结果显示更详细
-+ 简单的菜单栏及系统托盘图标
++ 翻译结果加入 短语
++ 托盘图标更换
++ 安装/更新方式优化
 
 
 
@@ -44,21 +47,24 @@
 
 
 
-## Installation
-
-~~在Release中提供了一个 `scripts/install.sh` 的安装脚本, 但不建议使用此脚本安装, 此脚本在`0.1.0`版本~~
-
-**安装方式**
+## Installation Or Upgrade
 
 ```shell
 # 下载
-wget https://github.com/DreamSaddle/youdao-dict/releases/download/0.2.0/youdao-dict-0.2.tar.gz
+# 请自行前往Release下载最新版本
+wget https://github.com/DreamSaddle/youdao-dict/releases/download/0.2.1/youdao-dict-0.2.1.tar.gz
 
 # 解压
-tar -zxvf youdao-dict-0.2.tar.gz
+tar -zxvf youdao-dict-0.2.1.tar.gz
 
-# 配置桌面图标文件即可
-# 此文件在 release/desktop 中准备了一份, 但需要你自行修改一下 Exec 和 Icon 文件路径
+# 安装/更新
+cd youdao-dict-0.2.1/scripts
+sudo chmod +x install.sh
+./install.sh
+
+# 执行完成即安装完成
+# 可在启动器 工具 类目中查看启动, 或直接终端运行
+youdao-dict
 ```
 
 
@@ -77,13 +83,20 @@ tar -zxvf youdao-dict-0.2.tar.gz
 
 ## Development
 
+### Requirements
+
++ Rust
++ Qt5 or higher
+
+
+
 建议开发使用`Linux`桌面环境开发. **此项目也只提供Linux版本Release**.
 
-首先请确保你已经安装好了`Rust`环境.
+首先请确保你已经安装好了`Rust`环境以及`Qt5`.
 
 ```shell
 git clone https://github.com/DreamSaddle/youdao-dict.git
-
+cd youdao-dict
 cargo run
 
 # 构建Release
@@ -107,6 +120,8 @@ cargo build --release
 ![en-zh](media/screenshots/003.png)
 
 
+
+![en-zh](media/screenshots/004.png)
 
 ## 为什么会有这个项目
 

@@ -18,6 +18,7 @@ use crate::gui::{
     startQt::MainWindowWidgets,
     opt::optLine::{OptLine},
     result::pronounce::{Pronounce},
+    result::phrase::{Phrase},
 };
 
 #[derive(Debug)]
@@ -126,6 +127,9 @@ impl TransText {
         } else {
             self.yd_request_result_handle_en_to_zh(&yd_result, mww);
         }
+
+        let yd_full_result = utils::request::do_full_get(sourceWord);
+        self.yd_request_full_result_handle(&yd_full_result, mww);
     }
 
     ///
@@ -148,5 +152,41 @@ impl TransText {
         let _pronounce = mww.transResult.pronounce.clone();
         //解析且展示翻译结果
         Pronounce::full_zh_to_en_trans_result(&_pronounce, &resultObj, mww);
+    }
+
+
+    ///
+    /// 详细请求结果处理
+    /// 包含网络释义, 短语
+    /// 
+    unsafe fn yd_request_full_result_handle(self: &Rc<Self>, yd_full_result: &String, mww: &Rc<MainWindowWidgets>) {
+        let result: serde_json::Value = serde_json::from_str(&yd_full_result).unwrap();
+        let john = json!(result["web_trans"]["web-translation"]);
+        // println!("{:?}", john);
+        
+        let webTrans: serde_json::Value = serde_json::from_value(john).unwrap();
+        //短语列表
+        let mut phraseTransList: Vec<structs::webTrans::PhraseModel> = Vec::new();
+        if webTrans.is_array() {
+            let webTransArr: &Vec<serde_json::Value> = webTrans.as_array().unwrap();
+            //网络释义, 暂时不展示
+            // let np: structs::webTrans::NetworkParaphrase = serde_json::from_value(webTransArr.get(0).unwrap().clone()).unwrap();
+            // println!("{:?}", np);
+            
+            let webTransLen = webTransArr.len();
+            let mut idx = 1;  //短语需要从第1个元素开始, 第0个元素为网络释义
+            loop {
+                if idx >= webTransLen {
+                    break;
+                }
+                let bean: structs::webTrans::PhraseModel = serde_json::from_value(webTransArr.get(idx).unwrap().clone()).unwrap();
+                phraseTransList.push(bean);
+                idx += 1;
+            }
+        }
+
+        //执行短语填充
+        let _phrase = mww.transResult.phrase.clone();
+        Phrase::full_phrase_list(&_phrase, phraseTransList);
     }
 }

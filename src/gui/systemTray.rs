@@ -28,7 +28,7 @@ impl StaticUpcast<QObject> for SystemTray {
 impl SystemTray {
     pub fn new(mw: Ptr<QMainWindow>) -> Rc<Self> {
         unsafe {
-            let icon = QIcon::from_q_string(&qs("./media/tray_icon.png"));
+            let icon = QIcon::from_q_string(&qs("/usr/share/icons/hicolor/scalable/apps/youdao-dict-tray.png"));
             let trayIcon = QSystemTrayIcon::new();
             trayIcon.set_icon(&icon);
             trayIcon.set_tool_tip(&qs("Youdao Dict"));

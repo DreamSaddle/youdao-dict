@@ -1,12 +1,12 @@
 
 ///
-/// 发音栏
+/// 基础翻译结果, 发音栏
 /// 
 
 use std::rc::Rc;
 
 use cpp_core::{NullPtr, Ptr, StaticUpcast};
-use qt_core::{qs, SlotNoArgs, QBox, slot, QObject, QFlags, TextInteractionFlag};
+use qt_core::{qs, SlotNoArgs, QBox, slot, QObject, QFlags, AlignmentFlag, TextInteractionFlag};
 use qt_widgets::{QWidget, QVBoxLayout, QHBoxLayout, QLabel, q_box_layout::Direction, QLayoutItem};
 use qt_gui::{QPixmap, QIcon};
 
@@ -46,7 +46,8 @@ impl Pronounce {
             let v_box = QVBoxLayout::new_1a(&widget);
 
             let trans_word_label: QBox<QLabel> = QLabel::new();
-            trans_word_label.set_text(&qs("code"));
+            trans_word_label.set_text(&qs(""));
+            trans_word_label.set_style_sheet(&qs("font-size:20px;font-weight:bold;color:#D81159"));
             trans_word_label.set_text_interaction_flags(QFlags::from(TextInteractionFlag::TextSelectableByMouse));
             v_box.add_widget(&trans_word_label);
 
@@ -91,7 +92,7 @@ impl Pronounce {
 
             //翻译结果行区域
             let result_widget = QWidget::new_0a();
-            result_widget.set_minimum_height(100);
+            // result_widget.set_minimum_height(10);
             let result_v_box = QVBoxLayout::new_1a(&result_widget);
             result_v_box.set_direction(Direction::TopToBottom);
             result_v_box.set_spacing(1);
@@ -101,6 +102,7 @@ impl Pronounce {
             let wfs_label: QBox<QLabel> = QLabel::new();
             wfs_label.set_text(&qs(""));
             wfs_label.set_text_interaction_flags(QFlags::from(TextInteractionFlag::TextSelectableByMouse));
+            wfs_label.set_style_sheet(&qs("font-size:12px;color:#ffffff;"));
             v_box.add_widget(&wfs_label);
 
             let this = Rc::new(Pronounce{
@@ -132,7 +134,8 @@ impl Pronounce {
                 let label: QBox<QLabel> = QLabel::new();
                 label.set_text(&qs(zh_line));
                 label.set_text_interaction_flags(QFlags::from(TextInteractionFlag::TextSelectableByMouse));
-                self.reusltLineBox.add_widget(&label);
+                label.set_style_sheet(&qs("font-size:13px;color:#ffffff;"));
+                self.reusltLineBox.add_widget_3a(&label, 0, QFlags::from(AlignmentFlag::AlignTop));
                 
             }
             self.wfsLabel.set_text(&qs(parse_result.wfs));
@@ -157,7 +160,8 @@ impl Pronounce {
                 let label: QBox<QLabel> = QLabel::new();
                 label.set_text(&qs(zh_line));
                 label.set_text_interaction_flags(QFlags::from(TextInteractionFlag::TextSelectableByMouse));
-                self.reusltLineBox.add_widget(&label);
+                label.set_style_sheet(&qs("font-size:13px;color:#ffffff;"));
+                self.reusltLineBox.add_widget_3a(&label, 0, QFlags::from(AlignmentFlag::AlignTop));
                 
             }
             TransResult::show(&mww.transResult);
