@@ -6,7 +6,10 @@ use qt_core::{QCoreApplication, qs, SlotNoArgs, QBox, QPtr, slot, QObject};
 use qt_widgets::{QMainWindow, QAction, QMenu, QSystemTrayIcon, SlotOfActivationReason, q_system_tray_icon::ActivationReason};
 use qt_gui::{QIcon};
 
-use crate::gui::about::About;
+use crate::gui::{
+    about::About,
+    constants::Constants
+};
 
 
 pub struct SystemTray {
@@ -28,10 +31,10 @@ impl StaticUpcast<QObject> for SystemTray {
 impl SystemTray {
     pub fn new(mw: Ptr<QMainWindow>) -> Rc<Self> {
         unsafe {
-            let icon = QIcon::from_q_string(&qs("/usr/share/icons/hicolor/scalable/apps/youdao-dict-tray.png"));
+            let icon = QIcon::from_q_string(&qs(Constants::system_tray_icon_path()));
             let trayIcon = QSystemTrayIcon::new();
             trayIcon.set_icon(&icon);
-            trayIcon.set_tool_tip(&qs("Youdao Dict"));
+            trayIcon.set_tool_tip(&qs(Constants::application_name()));
             trayIcon.show();
 
             let action = QAction::from_q_string(&qs("关于"));

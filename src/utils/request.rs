@@ -1,4 +1,8 @@
 
+use std::path::{Path, PathBuf};
+use std::io::prelude::*;
+use tempfile::NamedTempFile;
+
 /// 词汇简明信息查询
 /// 
 /// 返回基础信息struct
@@ -56,11 +60,42 @@ async fn do_get(url: &String) -> Result<String, reqwest::Error> {
     headerMap.append("Host", "dict.youdao.com".parse().unwrap());
     headerMap.append("User-Agent", "Youdao Desktop Dict (Windows NT 10.0)".parse().unwrap());
     headerMap.append("Accept", "*/*".parse().unwrap());
-    headerMap.append("Cookie", "DESKDICT_VENDOR=webdict_default; OUTFOX_SEARCH_USER_ID=2036004394@10.108.160.17".parse().unwrap());
+    headerMap.append("Cookie", "DESKDICT_VENDOR=webdict_default; OUTFOX_SEARCH_USER_ID=2036004394@11.118.160.17".parse().unwrap());
     headerMap.append("Connection", "Keep-Alive".parse().unwrap());
     rb = rb.headers(headerMap);
 
     let jsonStr = rb.send().await?.text().await.unwrap();
 
     Ok(jsonStr)
+}
+
+
+///
+/// 保存发音音频临时文件
+/// 
+/// url: 音频文件网络地址
+/// buffer: 临时文件引用
+/// 
+pub fn save_pronounce_tmp_file(url: &str, buffer: &NamedTempFile) {
+    futures::executor::block_on(do_save_pronounce_tmp_file(url, buffer));
+}
+
+
+async fn do_save_pronounce_tmp_file(url: &str, buffer: &NamedTempFile) -> Result<(), failure::Error> {
+    let mut buffer = buffer;
+    let client = reqwest::Client::builder()
+        .build().expect("builder error");
+    let builder = client.request(reqwest::Method::GET, url);
+    let mut res = builder.send().await?;
+
+    if let Some(chunk) = res.chunk().await? {
+        buffer.write(&chunk[..]).unwrap();
+    }
+
+    while let Some(chunk) = res.chunk().await? {
+        buffer.write(&chunk[..]).unwrap();
+    }
+
+
+    Ok(())
 }

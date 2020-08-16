@@ -12,6 +12,9 @@ use crate::gui::{
     opt::optLine::{OptLine},
     text::transText::{TransText},
     result::transResult::{TransResult},
+    result::pronounce::Pronounce,
+    constants::Constants,
+    runtimeState::RunTimeState,
 };
 
 #[derive(Debug)]
@@ -24,7 +27,8 @@ pub struct MainWindowWidgets {
 #[derive(Debug)]
 pub struct StartQt {
     mw: QBox<QMainWindow>,
-    mww: Rc<MainWindowWidgets>,
+    pub mww: Rc<MainWindowWidgets>,
+    pub state: RunTimeState
 }
 
 
@@ -42,6 +46,8 @@ impl StartQt {
                 let mainWindow: QBox<QMainWindow> = QMainWindow::new_0a();
                 let sa = QScrollArea::new_1a(&mainWindow);
                 let windowWidget = QWidget::new_0a();
+
+                let _state = RunTimeState::new();
         
                 let _mw_widgets = initWindowWidgets(&windowWidget);
                 let _systemTray = SystemTray::new(mainWindow.as_ptr());
@@ -49,16 +55,17 @@ impl StartQt {
         
                 sa.set_widget_resizable(true);
                 sa.set_widget(&windowWidget);
-                mainWindow.set_fixed_size_2a(700, 300);
+                mainWindow.set_fixed_size_2a(Constants::application_width(), Constants::application_height());
                 sa.resize_1a(&mainWindow.size());
                 windowWidget.resize_1a(&mainWindow.size());
-                mainWindow.set_window_title(&qs("Youdao Dict"));
-                let icon = QIcon::from_q_string(&qs("/usr/share/icons/hicolor/scalable/apps/youdao-dict-desktop.png"));
+                mainWindow.set_window_title(&qs(Constants::application_name()));
+                let icon = QIcon::from_q_string(&qs(Constants::application_icon()));
                 mainWindow.set_window_icon(&icon);
                 mainWindow.show();
                 let this = Rc::new(StartQt{
                     mw: mainWindow,
-                    mww: _mw_widgets
+                    mww: _mw_widgets,
+                    state: _state
                 });
                 this.init_slots();
                 QApplication::exec()

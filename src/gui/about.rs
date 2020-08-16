@@ -1,7 +1,9 @@
 
 use cpp_core::{Ptr};
-use qt_core::{qs, QFlags, AlignmentFlag, QRect};
+use qt_core::{qs, QFlags, AlignmentFlag};
 use qt_widgets::{QMainWindow, QWidget, QDialog, QLabel, QVBoxLayout};
+
+use crate::gui::constants::Constants;
 
 pub struct About {
 
@@ -14,7 +16,7 @@ impl About {
 
             let w = QWidget::new_1a(&about_dialog);
             let vbox = QVBoxLayout::new_1a(&w);
-            let app_name_label = QLabel::from_q_string(&qs("Youdao-Dict"));
+            let app_name_label = QLabel::from_q_string(&qs(Constants::application_name()));
             app_name_label.set_style_sheet(&qs("font-size:20px;font-weight:bold;"));
             vbox.add_widget(&app_name_label);
 
@@ -35,6 +37,7 @@ impl About {
             app_desc_label.set_open_external_links(true);
             vbox.add_widget(&app_desc_label);
             
+            about_dialog.set_window_title(&qs("关于"));
             about_dialog.set_fixed_size_2a(400, 300);
             about_dialog.exec();
         }

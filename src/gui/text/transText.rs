@@ -5,7 +5,7 @@
 use std::rc::Rc;
 
 use cpp_core::{NullPtr, Ptr, StaticUpcast};
-use qt_core::{qs, SlotNoArgs, QBox, slot, QObject, QSize, ShortcutContext};
+use qt_core::{qs, SlotNoArgs, QBox, slot, QObject, ShortcutContext, QFlags, AlignmentFlag};
 use qt_widgets::{QWidget, QVBoxLayout, QHBoxLayout, QTextEdit, QShortcut};
 use qt_gui::{QKeySequence};
 
@@ -44,6 +44,7 @@ impl TransText {
         
             let sourceEditWidget = QWidget::new_0a();
             let se = QTextEdit::from_q_widget(&sourceEditWidget);
+            se.set_minimum_height(70);
             se.set_maximum_height(100);
             line.add_widget(&se);
         
@@ -53,7 +54,7 @@ impl TransText {
             // line.add_widget(&te);
         
             vBox.add_spacing(0);
-            vBox.add_widget(&vBoxWidget);
+            vBox.add_widget_3a(&vBoxWidget, 0, QFlags::from(AlignmentFlag::AlignTop));
             vBox.add_stretch_0a();
 
             let this = Rc::new(TransText {

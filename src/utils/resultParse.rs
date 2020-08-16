@@ -6,7 +6,9 @@ use crate::structs;
 
 pub struct EnToZh {
     pub zhLines: Vec<String>,
-    pub wfs: String
+    pub wfs: String,
+    pub usphone: String,
+    pub ukphone: String,
 }
 
 ///
@@ -16,11 +18,19 @@ pub struct EnToZh {
 pub fn request_result_parse_en_to_zh(resultObj: &structs::engConciseInfo::EngConciseInfo) -> EnToZh {
     let mut zh_lines = Vec::new();
     let mut wfs_str = String::from("");
+    let mut usphone = String::from("");
+    let mut ukphone = String::from("");
     if resultObj.ec.is_some() {
         let word: Option<&Vec<structs::engConciseInfo::Word>> = resultObj.ec.as_ref().unwrap().word.as_ref();
 
         if word.is_some() {
             for w in word.unwrap().iter() {
+                if w.usphone.is_some() {
+                    usphone = String::from(w.usphone.as_ref().unwrap());
+                }
+                if w.ukphone.is_some() {
+                    ukphone = String::from(w.ukphone.as_ref().unwrap());
+                }
                 let trs: Option<&Vec<structs::engConciseInfo::Trs>> = w.trs.as_ref();
                 if trs.is_some() {
                     for trs_ in trs.unwrap().iter() {
@@ -63,7 +73,9 @@ pub fn request_result_parse_en_to_zh(resultObj: &structs::engConciseInfo::EngCon
     }
     EnToZh {
         zhLines: zh_lines,
-        wfs: wfs_str
+        wfs: wfs_str,
+        usphone: usphone,
+        ukphone: ukphone
     }
 }
 
