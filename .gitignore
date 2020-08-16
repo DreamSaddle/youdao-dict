@@ -1,3 +1,4 @@
 /target
 /release
 youdao-dict-*.tar.gz
+Cargo.lock
