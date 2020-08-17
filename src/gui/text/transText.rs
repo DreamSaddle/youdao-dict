@@ -19,6 +19,11 @@ use crate::gui::{
     opt::optLine::{OptLine},
     result::pronounce::{Pronounce},
     result::phrase::{Phrase},
+    runtimeState::LastOptTime,
+};
+
+use crate::utils::{
+    datetime::{current_timestamp_millis}
 };
 
 #[derive(Debug)]
@@ -111,9 +116,20 @@ impl TransText {
     /// 执行翻译
     /// 
     pub unsafe fn do_trans(self: &Rc<Self>, mww: &Rc<MainWindowWidgets>) {
-        let sourceWord = self.sourceEdit.to_plain_text().to_std_string();
-        if sourceWord != "" {
-            self.do_request(&sourceWord, mww);
+        let mut traned = false;
+        {
+            let b = LastOptTime::get_instance();
+            let _lastTranTime = b.clone().lock().unwrap().lastTranOptTime;
+            if _lastTranTime == -1 || current_timestamp_millis() - _lastTranTime > 1000 {
+                let sourceWord = self.sourceEdit.to_plain_text().to_std_string();
+                if sourceWord != "" {
+                    traned = true;
+                    self.do_request(&sourceWord, mww);
+                }
+            }
+        }
+        if traned {
+            LastOptTime::refresh_last_tran_time();
         }
     }
 

@@ -11,10 +11,10 @@ use qt_widgets::{QWidget, QVBoxLayout, QHBoxLayout, QLabel, q_box_layout::Direct
 use qt_gui::{QIcon};
 
 use crate::gui::{
-    startQt::{MainWindowWidgets, StartQt},
+    startQt::{MainWindowWidgets},
     result::transResult::{TransResult},
     constants::Constants,
-    runtimeState::RunTimeState,
+    runtimeState::LastOptTime,
 };
 
 use crate::utils::{
@@ -155,13 +155,20 @@ impl Pronounce {
         
     }
 
-
     ///
     /// 英式音标发音执行
     /// 
     #[slot(SlotNoArgs)]
     unsafe fn on_uk_pronounce_button_clicked(self: &Rc<Self>) {
-        play_phonogram(&self.transWordLabel.text().to_std_string(), 2);
+        {
+            let b = LastOptTime::get_instance();
+            let _lastBornTime = b.clone().lock().unwrap().lastUkLastOptTime;
+            if _lastBornTime == -1 || current_timestamp_millis() - _lastBornTime > 1000 {
+                play_phonogram(&self.transWordLabel.text().to_std_string(), 2);
+            }
+        }
+        //上面需要提入到 {}代码段中, 否则刷新最后一次发音时间会造成死锁问题
+        LastOptTime::refresh_last_uk_born_time();
     }
 
 
@@ -170,7 +177,14 @@ impl Pronounce {
     /// 
     #[slot(SlotNoArgs)]
     unsafe fn on_us_pronounce_button_clicked(self: &Rc<Self>) {
-        play_phonogram(&self.transWordLabel.text().to_std_string(), 1);
+        {
+            let b = LastOptTime::get_instance();
+            let _lastBornTime = b.clone().lock().unwrap().lastUsLastOptTime;
+            if _lastBornTime == -1 || current_timestamp_millis() - _lastBornTime > 1000 {
+                play_phonogram(&self.transWordLabel.text().to_std_string(), 1);
+            }
+        }
+        LastOptTime::refresh_last_us_born_time();
     }
 
 

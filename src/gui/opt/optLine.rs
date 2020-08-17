@@ -14,9 +14,7 @@ use regex::Regex;
 use crate::gui::{
     startQt::MainWindowWidgets,
     text::transText::{TransText},
-    result::transResult::{TransResult},
 };
-
 
 #[derive(Debug)]
 pub struct OptLine {
@@ -75,7 +73,7 @@ impl OptLine {
 
 
     unsafe fn init(self: &Rc<Self>, mww: &Rc<MainWindowWidgets>) {
-        //搜索按钮点击
+        //翻译按钮点击
         let _mww = mww.clone();
         let _transText = mww.transText.clone();
         let _transResult = mww.transResult.clone();

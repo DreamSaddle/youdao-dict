@@ -13,8 +13,7 @@ use crate::gui::{
     text::transText::{TransText},
     result::transResult::{TransResult},
     result::pronounce::Pronounce,
-    constants::Constants,
-    runtimeState::RunTimeState,
+    constants::Constants
 };
 
 #[derive(Debug)]
@@ -27,8 +26,7 @@ pub struct MainWindowWidgets {
 #[derive(Debug)]
 pub struct StartQt {
     mw: QBox<QMainWindow>,
-    pub mww: Rc<MainWindowWidgets>,
-    pub state: RunTimeState
+    pub mww: Rc<MainWindowWidgets>
 }
 
 
@@ -46,8 +44,6 @@ impl StartQt {
                 let mainWindow: QBox<QMainWindow> = QMainWindow::new_0a();
                 let sa = QScrollArea::new_1a(&mainWindow);
                 let windowWidget = QWidget::new_0a();
-
-                let _state = RunTimeState::new();
         
                 let _mw_widgets = initWindowWidgets(&windowWidget);
                 let _systemTray = SystemTray::new(mainWindow.as_ptr());
@@ -64,8 +60,7 @@ impl StartQt {
                 mainWindow.show();
                 let this = Rc::new(StartQt{
                     mw: mainWindow,
-                    mww: _mw_widgets,
-                    state: _state
+                    mww: _mw_widgets
                 });
                 this.init_slots();
                 QApplication::exec()
