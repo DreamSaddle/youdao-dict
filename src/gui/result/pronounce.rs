@@ -125,7 +125,7 @@ impl Pronounce {
             let wfs_label: QBox<QLabel> = QLabel::new();
             wfs_label.set_text(&qs(""));
             wfs_label.set_text_interaction_flags(QFlags::from(TextInteractionFlag::TextSelectableByMouse));
-            wfs_label.set_style_sheet(&qs("font-size:12px;color:#ffffff;"));
+            wfs_label.set_style_sheet(&qs("font-size:12px;"));
             v_box.add_widget(&wfs_label);
 
             let this = Rc::new(Pronounce{
@@ -221,7 +221,7 @@ impl Pronounce {
                 let label: QBox<QLabel> = QLabel::new();
                 label.set_text(&qs(zh_line));
                 label.set_text_interaction_flags(QFlags::from(TextInteractionFlag::TextSelectableByMouse));
-                label.set_style_sheet(&qs("font-size:13px;color:#ffffff;"));
+                label.set_style_sheet(&qs("font-size:13px;"));
                 self.reusltLineBox.add_widget_3a(&label, 0, QFlags::from(AlignmentFlag::AlignTop));
                 
             }
@@ -251,7 +251,7 @@ impl Pronounce {
                 let label: QBox<QLabel> = QLabel::new();
                 label.set_text(&qs(zh_line));
                 label.set_text_interaction_flags(QFlags::from(TextInteractionFlag::TextSelectableByMouse));
-                label.set_style_sheet(&qs("font-size:13px;color:#ffffff;"));
+                label.set_style_sheet(&qs("font-size:13px;"));
                 self.reusltLineBox.add_widget_3a(&label, 0, QFlags::from(AlignmentFlag::AlignTop));
                 
             }

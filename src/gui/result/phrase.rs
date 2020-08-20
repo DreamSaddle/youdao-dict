@@ -91,7 +91,7 @@ impl Phrase {
                         }
                         let phrase_value = QLabel::from_q_string(&qs(values_str));
                         phrase_value.set_text_interaction_flags(QFlags::from(TextInteractionFlag::TextSelectableByMouse));
-                        phrase_value.set_style_sheet(&qs("font-size:13px;color:#ffffff;"));
+                        phrase_value.set_style_sheet(&qs("font-size:13px;"));
                         phraseHBox.add_widget_3a(&phrase_value, 9, QFlags::from(AlignmentFlag::AlignLeft));
                 }
 
