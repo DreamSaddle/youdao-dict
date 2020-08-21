@@ -2,9 +2,9 @@
 use std::rc::Rc;
 
 use cpp_core::{Ptr, StaticUpcast};
-use qt_core::{qs, QBox, QObject};
-use qt_widgets::{QApplication, QWidget, QMainWindow, QVBoxLayout, q_box_layout::Direction, QScrollArea};
-use qt_gui::{QIcon, QPalette, q_palette::ColorRole, QColor};
+use qt_core::{qs, QBox, QObject, QCoreApplication};
+use qt_widgets::{QApplication, QWidget, QMainWindow, QVBoxLayout, QScrollArea};
+use qt_gui::{QIcon,};
 
 use crate::gui::{
     systemTray::SystemTray,
@@ -41,6 +41,8 @@ impl StartQt {
         
         unsafe {
             QApplication::init(|_| {
+                QCoreApplication::set_application_name(&qs(Constants::application_name()));
+
                 let mainWindow: QBox<QMainWindow> = QMainWindow::new_0a();
                 let sa = QScrollArea::new_1a(&mainWindow);
                 let windowWidget = QWidget::new_0a();
@@ -54,11 +56,7 @@ impl StartQt {
                 mainWindow.set_fixed_size_2a(Constants::application_width(), Constants::application_height());
                 sa.resize_1a(&mainWindow.size());
                 windowWidget.resize_1a(&mainWindow.size());
-                // let palette = mainWindow.palette();
-                // palette.set_color_2a(ColorRole::Background, &QColor::from_3_int(243, 11, 4));
-                // mainWindow.set_auto_fill_background(true);
-                // mainWindow.set_palette(palette);
-                mainWindow.set_window_title(&qs(Constants::application_name()));
+                mainWindow.set_window_title(&qs(QCoreApplication::application_name().to_std_string()));
                 let icon = QIcon::from_q_string(&qs(Constants::application_icon()));
                 mainWindow.set_window_icon(&icon);
                 mainWindow.show();
@@ -89,8 +87,6 @@ impl StartQt {
 unsafe fn initWindowWidgets(windowWidget: &QBox<QWidget>) -> Rc<MainWindowWidgets> {
     let v_box = QVBoxLayout::new_1a(windowWidget);
     v_box.set_contents_margins_4a(0, 0, 0, 0);
-    // v_box.set_spacing(2);
-    v_box.set_direction(Direction::TopToBottom);
 
     //初始化操作栏
     let _optLine = OptLine::new(&v_box);

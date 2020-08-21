@@ -8,7 +8,20 @@ pub struct ZhConciseInfo {
     pub input: Option<String>,
     pub le: Option<String>,
     pub lang: Option<String>,
-    pub ce: Option<Ce>
+    pub ce: Option<Ce>,
+
+    pub fanyi: Option<FanYi>
+}
+
+///
+/// 翻译内容为短语使用
+/// 
+#[derive(Serialize, Deserialize, Debug)]
+pub struct FanYi {
+    //翻译短语源
+    pub input: Option<String>,
+    //翻译结果
+    pub tran: Option<String>
 }
 
 #[derive(Serialize, Deserialize, Debug)]

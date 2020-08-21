@@ -24,7 +24,9 @@ impl About {
             authors.set_open_external_links(true);
             vbox.add_widget(&authors);
 
-            let version = QLabel::from_q_string(&qs("<span style='font-size:13px;font-weight:bold;'>Version:&emsp;</span> 0.2.0"));
+            let mut version_text = String::from("<span style='font-size:13px;font-weight:bold;'>Version:&emsp;</span>");
+            version_text.push_str(Constants::application_version().as_str());
+            let version = QLabel::from_q_string(&qs(version_text));
             vbox.add_widget(&version);
 
             let project_repo = QLabel::from_q_string(&qs("<span style='font-size:13px;font-weight:bold;'>项目地址:&emsp;</span><a href='https://github.com/DreamSaddle/youdao-dict'>Github</a>"));

@@ -49,6 +49,7 @@ impl TransText {
         
             let sourceEditWidget = QWidget::new_0a();
             let se = QTextEdit::from_q_widget(&sourceEditWidget);
+            se.set_accept_rich_text(false);
             se.set_minimum_height(70);
             se.set_maximum_height(100);
             line.add_widget(&se);
@@ -99,6 +100,7 @@ impl TransText {
     #[slot(SlotNoArgs)]
     unsafe fn on_source_clear_shotcut_activated(self: &Rc<Self>) {
         self.sourceEdit.set_plain_text(&qs(""));
+        self.sourceEdit.set_focus_0a();
     }
     
     ///

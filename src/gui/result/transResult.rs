@@ -7,11 +7,10 @@ use std::rc::Rc;
 
 use cpp_core::{NullPtr, Ptr, StaticUpcast};
 use qt_core::{qs, SlotNoArgs, QBox, slot, QObject, QFlags, AlignmentFlag};
-use qt_widgets::{QWidget, QVBoxLayout, QHBoxLayout, QTextEdit};
+use qt_widgets::{QWidget, QVBoxLayout};
 
 
 use crate::gui::{
-    startQt::MainWindowWidgets,
     result::pronounce::Pronounce,
     result::phrase::Phrase,
 };
@@ -31,7 +30,7 @@ impl TransResult {
             let result_widget = QWidget::new_0a();
             let result_vbox = QVBoxLayout::new_1a(&result_widget);
             
-            //基础信息, 发音栏
+            //基础结果信息, 发音栏
             let pronounce = Pronounce::new();
             result_vbox.add_widget_3a(pronounce.as_ref().widget.as_ptr(), 0, QFlags::from(AlignmentFlag::AlignTop));
 
@@ -39,7 +38,8 @@ impl TransResult {
             let phrase = Phrase::new();
             result_vbox.add_widget_3a(phrase.as_ref().widget.as_ptr(), 0, QFlags::from(AlignmentFlag::AlignTop));
 
-            vBox.add_widget(&result_widget);
+            vBox.add_widget_3a(&result_widget, 0, QFlags::from(AlignmentFlag::AlignTop));
+            vBox.add_stretch_0a();
             let this = Rc::new(TransResult {
                 widget: result_widget,
                 pronounce: pronounce,

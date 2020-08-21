@@ -1,5 +1,5 @@
 [package]
-name = "youdao-dict"
+name = "YDict"
 version = "0.2.1"
 authors = ["DreamSaddle"]
 edition = "2018"

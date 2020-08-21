@@ -13,7 +13,11 @@ impl Constants {
     }
 
     pub fn application_name() -> String {
-        String::from("Youdao Dict")
+        String::from("YDict")
+    }
+    
+    pub fn application_version() -> String {
+        String::from("0.2.1")
     }
 
     pub fn application_icon() -> String {

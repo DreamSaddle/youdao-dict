@@ -5,7 +5,10 @@ use cpp_core::{NullPtr, Ptr, StaticUpcast};
 use qt_core::{QCoreApplication, QPtr,qs, SlotNoArgs, QBox, QObject, slot};
 use qt_widgets::{QMainWindow, QMenuBar, QMenu, QAction};
 
-use crate::gui::about::About;
+use crate::gui::{
+    about::About,
+    usage::Usage
+};
 
 pub struct AppMenu {
     mw: Ptr<QMainWindow>,
@@ -13,6 +16,7 @@ pub struct AppMenu {
     pub helpMenu: QBox<QMenu>,
     pub exitAction: QPtr<QAction>,
     pub aboutAction: QPtr<QAction>,
+    pub usageAction: QPtr<QAction>,
 }
 
 
@@ -32,6 +36,7 @@ impl AppMenu {
             let help_menu = QMenu::new();
 
             let about_action = help_menu.add_action_q_string(&qs("关于"));
+            let usage_action = help_menu.add_action_q_string(&qs("如何使用"));
             help_menu.add_separator();
             let exit_action = help_menu.add_action_q_string(&qs("退出"));
 
@@ -44,7 +49,8 @@ impl AppMenu {
                 helpAction: help_action,
                 helpMenu: help_menu,
                 aboutAction: about_action,
-                exitAction: exit_action
+                exitAction: exit_action,
+                usageAction: usage_action
             });
             this.init();
             this
@@ -56,6 +62,9 @@ impl AppMenu {
         //关于
         self.aboutAction.triggered().connect(&self.slot_on_help_action_triggered());
 
+        //使用
+        self.usageAction.triggered().connect(&self.slot_on_usage_action_triggered());
+
         //退出程序
         self.exitAction.triggered().connect(&self.slot_on_exit_action_triggered());
     }
@@ -64,6 +73,11 @@ impl AppMenu {
     #[slot(SlotNoArgs)]
     unsafe fn on_help_action_triggered(self: &Rc<Self>) {
         About::show(self.mw);
+    }
+
+    #[slot(SlotNoArgs)]
+    unsafe fn on_usage_action_triggered(self: &Rc<Self>) {
+        Usage::show(self.mw);
     }
 
     #[slot(SlotNoArgs)]

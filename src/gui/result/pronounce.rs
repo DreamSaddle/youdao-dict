@@ -48,6 +48,9 @@ pub struct Pronounce {
     usPLabel: QBox<QLabel>,
     //英语其他时态对应词汇
     wfsLabel: QBox<QLabel>,
+
+    //段落翻译结果
+    paragraphResultLabel: QBox<QLabel>,
 }
 
 
@@ -61,7 +64,21 @@ impl Pronounce {
     pub fn new() -> Rc<Self> {
         unsafe {
             let widget = QWidget::new_0a();
+            widget.set_minimum_height(10);
             let v_box = QVBoxLayout::new_1a(&widget);
+            v_box.set_direction(Direction::TopToBottom);
+
+
+            //短语/段落 翻译结果
+            let paragraph_result_label = QLabel::new();
+            paragraph_result_label.adjust_size();
+            paragraph_result_label.set_word_wrap(true);
+            paragraph_result_label.set_text_interaction_flags(QFlags::from(TextInteractionFlag::TextSelectableByMouse));
+            paragraph_result_label.set_style_sheet(&qs("font-size:12px;"));
+            paragraph_result_label.hide();
+            v_box.add_widget_3a(&paragraph_result_label, 0, QFlags::from(AlignmentFlag::AlignTop));
+            v_box.set_alignment_q_widget_q_flags_alignment_flag(&paragraph_result_label, QFlags::from(AlignmentFlag::AlignTop));
+            
 
             let trans_word_label: QBox<QLabel> = QLabel::new();
             trans_word_label.set_text(&qs(""));
@@ -128,6 +145,7 @@ impl Pronounce {
             wfs_label.set_style_sheet(&qs("font-size:12px;"));
             v_box.add_widget(&wfs_label);
 
+
             let this = Rc::new(Pronounce{
                 widget: widget,
                 transWordLabel: trans_word_label,
@@ -140,6 +158,7 @@ impl Pronounce {
                 usPLabel: us_p_label,
                 usPButton: us_p_button,
                 wfsLabel: wfs_label,
+                paragraphResultLabel: paragraph_result_label
             });
             this.init();
             this
@@ -193,6 +212,17 @@ impl Pronounce {
     /// 
     pub unsafe fn full_en_to_zh_trans_result(self: &Rc<Self>, obj: &EngConciseInfo, mww: &Rc<MainWindowWidgets>) {
         self.clear_all_result_content();
+
+        if obj.fanyi.is_some() {
+            //段落翻译
+            let tran_option = obj.fanyi.as_ref().unwrap().tran.as_ref();
+            if tran_option.is_some() {
+                self.paragraphResultLabel.set_text(&qs(tran_option.unwrap()));
+            }
+            self.paragraphResultLabel.show();
+            TransResult::show(&mww.transResult);
+            return
+        }
         
         //解析结果
         let parse_result = request_result_parse_en_to_zh(obj);
@@ -221,11 +251,15 @@ impl Pronounce {
                 let label: QBox<QLabel> = QLabel::new();
                 label.set_text(&qs(zh_line));
                 label.set_text_interaction_flags(QFlags::from(TextInteractionFlag::TextSelectableByMouse));
-                label.set_style_sheet(&qs("font-size:13px;"));
+                label.set_style_sheet(&qs("font-size:13px;font-weight:500;"));
+                label.adjust_size();
+                label.set_word_wrap(true);
                 self.reusltLineBox.add_widget_3a(&label, 0, QFlags::from(AlignmentFlag::AlignTop));
                 
             }
             self.wfsLabel.set_text(&qs(parse_result.wfs));
+            self.hornWidget.show();
+            self.transWordLabel.show();
             TransResult::show(&mww.transResult);
         } else {
             TransResult::hide(&mww.transResult);
@@ -237,6 +271,18 @@ impl Pronounce {
     /// 
     pub unsafe fn full_zh_to_en_trans_result(self: &Rc<Self>, obj: &ZhConciseInfo, mww: &Rc<MainWindowWidgets>) {
         self.clear_all_result_content();
+
+        if obj.fanyi.is_some() {
+            //段落翻译
+            let tran_option = obj.fanyi.as_ref().unwrap().tran.as_ref();
+            if tran_option.is_some() {
+                self.paragraphResultLabel.set_text(&qs(tran_option.unwrap()));
+            }
+            self.paragraphResultLabel.show();
+            TransResult::show(&mww.transResult);
+            return
+        }
+        
         let zh_lines: Vec<String> = request_result_parse_zh_to_en(obj);
 
         //隐藏发音栏
@@ -251,10 +297,13 @@ impl Pronounce {
                 let label: QBox<QLabel> = QLabel::new();
                 label.set_text(&qs(zh_line));
                 label.set_text_interaction_flags(QFlags::from(TextInteractionFlag::TextSelectableByMouse));
-                label.set_style_sheet(&qs("font-size:13px;"));
+                label.set_style_sheet(&qs("font-size:13px;font-weight:500;"));
+                label.adjust_size();
+                label.set_word_wrap(true);
                 self.reusltLineBox.add_widget_3a(&label, 0, QFlags::from(AlignmentFlag::AlignTop));
                 
             }
+            self.transWordLabel.show();
             TransResult::show(&mww.transResult);
         } else {
             TransResult::hide(&mww.transResult);
@@ -269,6 +318,12 @@ impl Pronounce {
         self.wfsLabel.set_text(&qs(""));
         self.ukPLabel.set_text(&qs(""));
         self.usPLabel.set_text(&qs(""));
+        self.paragraphResultLabel.set_text(&qs(""));
+
+        self.hornWidget.hide();
+        self.transWordLabel.hide();
+        self.paragraphResultLabel.hide();
+
         self.remove_reuslt_lines();
     }
     

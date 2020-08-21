@@ -4,6 +4,7 @@ pub mod appMenu;
 pub mod about;
 pub mod constants;
 pub mod runtimeState;
+pub mod usage;
 
 mod opt;
 mod text;
