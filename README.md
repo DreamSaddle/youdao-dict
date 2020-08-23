@@ -128,6 +128,8 @@ cargo build --release
 
 ![划词翻译](media/screenshots/006.png)
 
+![段落划词翻译](media/screenshots/007.png)
+
 ## 为什么会有这个项目
 
 我自从桌面切换为Linux环境后, 苦于英语差, 但是又没有找到好用的翻译软件. 便想着自己搞一个, 顺便还可以练习一下 `Rust` .
