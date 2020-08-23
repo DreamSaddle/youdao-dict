@@ -134,7 +134,7 @@ impl ClipboardResult {
             paragraph_result_label.adjust_size();
             paragraph_result_label.set_word_wrap(true);
             paragraph_result_label.set_text_interaction_flags(QFlags::from(TextInteractionFlag::TextSelectableByMouse));
-            paragraph_result_label.set_style_sheet(&qs("font-size:12px;"));
+            paragraph_result_label.set_style_sheet(&qs("font-size:12px;color:#ffffff;"));
             paragraph_result_label.hide();
             v_box.add_widget_3a(&paragraph_result_label, 0, QFlags::from(AlignmentFlag::AlignTop));
             v_box.set_alignment_q_widget_q_flags_alignment_flag(&paragraph_result_label, QFlags::from(AlignmentFlag::AlignTop));
@@ -246,11 +246,10 @@ impl ClipboardResult {
                 self.transWordLabel.set_text(&qs(obj.input.as_ref().unwrap()));
             }
 
-            let mut content = String::from("<p style='font-size:12px;'>");
+            let mut content = String::from("<p style='font-size:12px;color:#ffffff;'>");
             for zh_line in zh_lines.iter() {
                 content.push_str(zh_line);
                 content.push_str("<br/>");
-                
             }
             content.push_str("</p>");
             self.resultLineContent.set_text(&qs(content.to_string()));
@@ -285,11 +284,10 @@ impl ClipboardResult {
                 self.transWordLabel.set_text(&qs(obj.input.as_ref().unwrap()));
             }
 
-            let mut content = String::from("<p style='font-size:12px;'>");
+            let mut content = String::from("<p style='font-size:12px;color:#ffffff;'>");
             for zh_line in zh_lines.iter() {
                 content.push_str(zh_line);
                 content.push_str("<br/>");
-                
             }
             content.push_str("</p>");
             self.resultLineContent.set_text(&qs(content.to_string()));

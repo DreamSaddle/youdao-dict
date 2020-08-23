@@ -17,7 +17,7 @@ impl Constants {
     }
     
     pub fn application_version() -> String {
-        String::from("0.2.1")
+        String::from("0.3.0")
     }
 
     pub fn application_icon() -> String {
