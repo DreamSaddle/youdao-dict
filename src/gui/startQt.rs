@@ -2,9 +2,9 @@
 use std::rc::Rc;
 
 use cpp_core::{Ptr, StaticUpcast};
-use qt_core::{qs, QBox, QObject, QCoreApplication};
+use qt_core::{qs, SlotNoArgs, QBox, QObject, QCoreApplication};
 use qt_widgets::{QApplication, QWidget, QMainWindow, QVBoxLayout, QScrollArea};
-use qt_gui::{QIcon,};
+use qt_gui::{QIcon};
 
 use crate::gui::{
     systemTray::SystemTray,
@@ -44,6 +44,7 @@ impl StartQt {
                 QCoreApplication::set_application_name(&qs(Constants::application_name()));
 
                 let mainWindow: QBox<QMainWindow> = QMainWindow::new_0a();
+
                 let sa = QScrollArea::new_1a(&mainWindow);
                 let windowWidget = QWidget::new_0a();
         

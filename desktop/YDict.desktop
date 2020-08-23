@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=0.0
+Name=YDict
+Comment=Yodao Dict Linux Clone, Use Youdao Api.
+Exec=YDict
+Icon=/usr/share/icons/hicolor/scalable/apps/YDict/desktop.png
+Type=Application
+Categories=Utility;

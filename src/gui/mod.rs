@@ -5,6 +5,7 @@ pub mod about;
 pub mod constants;
 pub mod runtimeState;
 pub mod usage;
+pub mod clip;
 
 mod opt;
 mod text;

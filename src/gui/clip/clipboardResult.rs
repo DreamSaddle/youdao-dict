@@ -6,8 +6,8 @@
 use std::rc::Rc;
 
 use cpp_core::{NullPtr, Ptr, StaticUpcast};
-use qt_core::{qs, SlotNoArgs, QBox, slot, QObject, QFlags, AlignmentFlag, TextInteractionFlag};
-use qt_widgets::{QWidget, QVBoxLayout, QHBoxLayout, QLabel, q_box_layout::Direction, QLayoutItem, QPushButton};
+use qt_core::{qs, SlotNoArgs, QBox, slot, QObject, QFlags, AlignmentFlag, TextInteractionFlag, QCoreApplication};
+use qt_widgets::{QWidget, QVBoxLayout, QHBoxLayout, QLabel, q_box_layout::Direction, QPushButton};
 use qt_gui::{QIcon};
 
 use crate::gui::{
@@ -30,12 +30,11 @@ use crate::structs::engConciseInfo::EngConciseInfo;
 
 
 #[derive(Debug)]
-pub struct Pronounce {
+pub struct ClipboardResult {
     pub widget: QBox<QWidget>,
     //当前翻译词
     transWordLabel: QBox<QLabel>,
-    //翻译结果行
-    reusltLineBox: QBox<QVBoxLayout>,
+    resultLineContent: QBox<QLabel>,
     //中译英 发音行
     hornWidget: QBox<QWidget>,
     ukPWidget: QBox<QWidget>,
@@ -46,45 +45,34 @@ pub struct Pronounce {
     usPButton: QBox<QPushButton>,
     //美式音标
     usPLabel: QBox<QLabel>,
-    //英语其他时态对应词汇
-    wfsLabel: QBox<QLabel>,
 
     //段落翻译结果
     paragraphResultLabel: QBox<QLabel>,
 }
 
 
-impl StaticUpcast<QObject> for Pronounce {
+impl StaticUpcast<QObject> for ClipboardResult {
     unsafe fn static_upcast(ptr: Ptr<Self>) -> Ptr<QObject> {
         ptr.widget.as_ptr().static_upcast()
     }
 }
 
-impl Pronounce {
+impl ClipboardResult {
     pub fn new() -> Rc<Self> {
         unsafe {
             let widget = QWidget::new_0a();
             widget.set_minimum_height(10);
             let v_box = QVBoxLayout::new_1a(&widget);
             v_box.set_direction(Direction::TopToBottom);
-
-
-            //短语/段落 翻译结果
-            let paragraph_result_label = QLabel::new();
-            paragraph_result_label.adjust_size();
-            paragraph_result_label.set_word_wrap(true);
-            paragraph_result_label.set_text_interaction_flags(QFlags::from(TextInteractionFlag::TextSelectableByMouse));
-            paragraph_result_label.set_style_sheet(&qs("font-size:12px;"));
-            paragraph_result_label.hide();
-            v_box.add_widget_3a(&paragraph_result_label, 0, QFlags::from(AlignmentFlag::AlignTop));
-            v_box.set_alignment_q_widget_q_flags_alignment_flag(&paragraph_result_label, QFlags::from(AlignmentFlag::AlignTop));
-            
+        
+            let header_line = QWidget::new_0a();
+            let header_box = QHBoxLayout::new_1a(&header_line);
 
             let trans_word_label: QBox<QLabel> = QLabel::new();
             trans_word_label.set_text(&qs(""));
-            trans_word_label.set_style_sheet(&qs("font-size:20px;font-weight:bold;color:#D81159"));
+            trans_word_label.set_style_sheet(&qs("font-size:14px;font-weight:bold;color:#F8F8FF"));
             trans_word_label.set_text_interaction_flags(QFlags::from(TextInteractionFlag::TextSelectableByMouse));
-            v_box.add_widget_3a(&trans_word_label, 0, QFlags::from(AlignmentFlag::AlignTop));
+            header_box.add_widget_3a(&trans_word_label, 0, QFlags::from(AlignmentFlag::AlignLeft));
 
             //发音喇叭图标
             let icon = QIcon::from_q_string(&qs(Constants::born_icon_path()));
@@ -128,28 +116,39 @@ impl Pronounce {
 
             //默认隐藏
             horn_widget.hide();
-            v_box.add_widget_3a(&horn_widget, 0, QFlags::from(AlignmentFlag::AlignTop));
+            header_box.add_widget_3a(&horn_widget, 0, QFlags::from(AlignmentFlag::AlignLeft));
 
-            //翻译结果行区域
-            let result_widget = QWidget::new_0a();
-            // result_widget.set_minimum_height(10);
-            let result_v_box = QVBoxLayout::new_1a(&result_widget);
-            result_v_box.set_direction(Direction::TopToBottom);
-            result_v_box.set_spacing(1);
+            //关闭按钮  
+            let close_btn = QPushButton::new();
+            close_btn.set_style_sheet(&qs("QPushButton{border-radius:10px;border-width:0px;}"));
+            let close_icon = QIcon::from_q_string(&qs(Constants::clipboard_close_icon_path()));
+            close_btn.set_icon(&close_icon);
+            header_box.add_widget_3a(&close_btn, 0, QFlags::from(AlignmentFlag::AlignRight));
+            v_box.add_widget(&header_line);
+            close_btn.clicked().connect(&SlotNoArgs::new(&close_btn, move || {
+                QCoreApplication::exit_0a();
+            }));
 
-            v_box.add_widget(&result_widget);
+            //短语/段落 翻译结果
+            let paragraph_result_label = QLabel::new();
+            paragraph_result_label.adjust_size();
+            paragraph_result_label.set_word_wrap(true);
+            paragraph_result_label.set_text_interaction_flags(QFlags::from(TextInteractionFlag::TextSelectableByMouse));
+            paragraph_result_label.set_style_sheet(&qs("font-size:12px;"));
+            paragraph_result_label.hide();
+            v_box.add_widget_3a(&paragraph_result_label, 0, QFlags::from(AlignmentFlag::AlignTop));
+            v_box.set_alignment_q_widget_q_flags_alignment_flag(&paragraph_result_label, QFlags::from(AlignmentFlag::AlignTop));
 
-            let wfs_label: QBox<QLabel> = QLabel::new();
-            wfs_label.set_text(&qs(""));
-            wfs_label.set_text_interaction_flags(QFlags::from(TextInteractionFlag::TextSelectableByMouse));
-            wfs_label.set_style_sheet(&qs("font-size:12px;"));
-            v_box.add_widget(&wfs_label);
+            let pharese_content = QLabel::new();
+            pharese_content.set_text_interaction_flags(QFlags::from(TextInteractionFlag::TextSelectableByMouse));
+            pharese_content.adjust_size();
+            pharese_content.set_word_wrap(true);
+            v_box.add_widget(&pharese_content);
 
-
-            let this = Rc::new(Pronounce{
+            let this = Rc::new(ClipboardResult{
                 widget: widget,
                 transWordLabel: trans_word_label,
-                reusltLineBox: result_v_box,
+                resultLineContent: pharese_content,
                 hornWidget: horn_widget,
                 ukPWidget: uk_p_widget,
                 ukPLabel: uk_p_label,
@@ -157,7 +156,6 @@ impl Pronounce {
                 usPWidget: us_p_widget,
                 usPLabel: us_p_label,
                 usPButton: us_p_button,
-                wfsLabel: wfs_label,
                 paragraphResultLabel: paragraph_result_label
             });
             this.init();
@@ -210,17 +208,16 @@ impl Pronounce {
     ///
     /// 英译中结果填充
     /// 
-    pub unsafe fn full_en_to_zh_trans_result(self: &Rc<Self>, obj: &EngConciseInfo, mww: &Rc<MainWindowWidgets>) {
-        self.clear_all_result_content();
+    pub unsafe fn full_en_to_zh_trans_result(self: &Rc<Self>, obj: &EngConciseInfo) {
 
         if obj.fanyi.is_some() {
             //段落翻译
             let tran_option = obj.fanyi.as_ref().unwrap().tran.as_ref();
             if tran_option.is_some() {
                 self.paragraphResultLabel.set_text(&qs(tran_option.unwrap()));
+                self.paragraphResultLabel.set_style_sheet(&qs("font-size:12px;font-weight:500;color:#ffffff;"));
             }
             self.paragraphResultLabel.show();
-            TransResult::show(&mww.transResult);
             return
         }
         
@@ -230,12 +227,14 @@ impl Pronounce {
         self.hornWidget.show();
         if !parse_result.ukphone.is_empty() {
             self.ukPLabel.set_text(&qs(format!("英 [{}]", parse_result.ukphone)));
+            self.ukPLabel.set_style_sheet(&qs("font-size:12px;color:#ffffff;"));
             self.ukPWidget.show();
         } else {
             self.ukPWidget.hide()
         }
         if !parse_result.usphone.is_empty() {
             self.usPLabel.set_text(&qs(format!("美 [{}]", parse_result.usphone)));
+            self.usPLabel.set_style_sheet(&qs("font-size:12px;color:#ffffff;"));
             self.usPWidget.show();
         } else {
             self.usPWidget.hide();
@@ -247,39 +246,32 @@ impl Pronounce {
                 self.transWordLabel.set_text(&qs(obj.input.as_ref().unwrap()));
             }
 
+            let mut content = String::from("<p style='font-size:12px;'>");
             for zh_line in zh_lines.iter() {
-                let label: QBox<QLabel> = QLabel::new();
-                label.set_text(&qs(zh_line));
-                label.set_text_interaction_flags(QFlags::from(TextInteractionFlag::TextSelectableByMouse));
-                label.set_style_sheet(&qs("font-size:13px;font-weight:500;"));
-                label.adjust_size();
-                label.set_word_wrap(true);
-                self.reusltLineBox.add_widget_3a(&label, 0, QFlags::from(AlignmentFlag::AlignTop));
+                content.push_str(zh_line);
+                content.push_str("<br/>");
                 
             }
-            self.wfsLabel.set_text(&qs(parse_result.wfs));
+            content.push_str("</p>");
+            self.resultLineContent.set_text(&qs(content.to_string()));
             self.hornWidget.show();
             self.transWordLabel.show();
-            TransResult::show(&mww.transResult);
         } else {
-            TransResult::hide(&mww.transResult);
         }
     }
 
     ///
     /// 中译英结果填充
     /// 
-    pub unsafe fn full_zh_to_en_trans_result(self: &Rc<Self>, obj: &ZhConciseInfo, mww: &Rc<MainWindowWidgets>) {
-        self.clear_all_result_content();
-
+    pub unsafe fn full_zh_to_en_trans_result(self: &Rc<Self>, obj: &ZhConciseInfo) {
         if obj.fanyi.is_some() {
             //段落翻译
             let tran_option = obj.fanyi.as_ref().unwrap().tran.as_ref();
             if tran_option.is_some() {
                 self.paragraphResultLabel.set_text(&qs(tran_option.unwrap()));
+                self.paragraphResultLabel.set_style_sheet(&qs("font-size:12px;font-weight:500;color:#ffffff;"));
             }
             self.paragraphResultLabel.show();
-            TransResult::show(&mww.transResult);
             return
         }
         
@@ -293,55 +285,16 @@ impl Pronounce {
                 self.transWordLabel.set_text(&qs(obj.input.as_ref().unwrap()));
             }
 
+            let mut content = String::from("<p style='font-size:12px;'>");
             for zh_line in zh_lines.iter() {
-                let label: QBox<QLabel> = QLabel::new();
-                label.set_text(&qs(zh_line));
-                label.set_text_interaction_flags(QFlags::from(TextInteractionFlag::TextSelectableByMouse));
-                label.set_style_sheet(&qs("font-size:13px;font-weight:500;"));
-                label.adjust_size();
-                label.set_word_wrap(true);
-                self.reusltLineBox.add_widget_3a(&label, 0, QFlags::from(AlignmentFlag::AlignTop));
+                content.push_str(zh_line);
+                content.push_str("<br/>");
                 
             }
+            content.push_str("</p>");
+            self.resultLineContent.set_text(&qs(content.to_string()));
             self.transWordLabel.show();
-            TransResult::show(&mww.transResult);
         } else {
-            TransResult::hide(&mww.transResult);
-        }
-    }
-
-
-    ///
-    /// 清空上一次翻译结果
-    /// 
-    unsafe fn clear_all_result_content(self: &Rc<Self>) {
-        self.wfsLabel.set_text(&qs(""));
-        self.ukPLabel.set_text(&qs(""));
-        self.usPLabel.set_text(&qs(""));
-        self.paragraphResultLabel.set_text(&qs(""));
-
-        self.hornWidget.hide();
-        self.transWordLabel.hide();
-        self.paragraphResultLabel.hide();
-
-        self.remove_reuslt_lines();
-    }
-    
-    ///
-    /// 原内容清空
-    /// 
-    unsafe fn remove_reuslt_lines(self: &Rc<Self>) {
-        let count = self.reusltLineBox.count();
-        if count == 0 {
-            return
-        }
-        loop {
-            let item: Ptr<QLayoutItem> = self.reusltLineBox.take_at(0);
-            if item.is_null() {
-                break;
-            }
-            item.to_box().unwrap().widget().set_parent(NullPtr);
-            // self.reusltLineBox.remove_widget(item.to_box().unwrap().widget());
         }
     }
 }

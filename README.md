@@ -25,19 +25,22 @@
 </p>
 
 
-# Youdao Dict
+# YDict
 
-**Youdao Dict** 是一个使用 `Rust` + `Qt` 开发的仿<u>有道词典</u>的**翻译** + **词典** 工具.
+**YDict** 是一个使用 `Rust` + `Qt` 开发的仿<u>有道词典</u>的**翻译** + **词典** 工具.
 
 此项目所用到的Api为 [有道翻译Api](http://fanyi.youdao.com/?_blank).
 
 
 
-## New In 0.2.1
+## New In 0.3.0
 
-+ 翻译结果加入 短语
-+ 托盘图标更换
-+ 安装/更新方式优化
++ 项目更名为 **YDict**
++ 新增**段落**翻译
+
++ 新增**划词**翻译
++ 添加使用帮助
++ UI稍作调整
 
 
 
@@ -52,19 +55,19 @@
 ```shell
 # 下载
 # 请自行前往Release下载最新版本
-wget https://github.com/DreamSaddle/youdao-dict/releases/download/0.2.1/youdao-dict-0.2.1.tar.gz
+wget https://github.com/DreamSaddle/youdao-dict/releases/download/0.3.0/YDict-0.3.0.tar.gz
 
 # 解压
-tar -zxvf youdao-dict-0.2.1.tar.gz
+tar -zxvf YDict-0.3.0.tar.gz
 
 # 安装/更新
-cd youdao-dict-0.2.1/scripts
+cd YDict-0.3.0/scripts
 sudo chmod +x install.sh
 ./install.sh
 
 # 执行完成即安装完成
 # 可在启动器 工具 类目中查看启动, 或直接终端运行
-youdao-dict
+YDict
 ```
 
 
@@ -78,6 +81,16 @@ youdao-dict
 **Ctrl+U:** 清空输入框内容
 
 **Ctrl+Return(Enter):** 翻译
+
+
+
+### 划词翻译
+
+首先安装好**YDict**, 接着你需要在系统中为YDict的划词功能配置一个全局快捷键, 此快捷键测命令为 `YDict clipboard`
+
+例如:
+
+![划词翻译全局快捷键配置](media/screenshots/hc_shotcut.png)
 
 
 
@@ -107,21 +120,13 @@ cargo build --release
 
 ## Screenshots
 
+![中译英](media/screenshots/003.png)
 
+![短语](media/screenshots/004.png)
 
-![zh-en](media/screenshots/001.png)
+![段落翻译](media/screenshots/001.png)
 
-
-
-![en-zh](media/screenshots/002.png)
-
-
-
-![en-zh](media/screenshots/003.png)
-
-
-
-![en-zh](media/screenshots/004.png)
+![划词翻译](media/screenshots/006.png)
 
 ## 为什么会有这个项目
 

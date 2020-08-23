@@ -21,7 +21,7 @@ impl Constants {
     }
 
     pub fn application_icon() -> String {
-        String::from("/usr/share/icons/hicolor/scalable/apps/youdao-dict-desktop.png")
+        String::from("/usr/share/icons/hicolor/scalable/apps/YDict/desktop.png")
     }
 
 
@@ -29,13 +29,17 @@ impl Constants {
     /// 系统托盘图标路径
     /// 
     pub fn system_tray_icon_path() -> String {
-        String::from("/usr/share/icons/hicolor/scalable/apps/youdao-dict-tray.png")
+        String::from("/usr/share/icons/hicolor/scalable/apps/YDict/tray.png")
     }
     
     ///
     /// 喇叭图标路径
     /// 
     pub fn born_icon_path() -> String {
-        String::from("/usr/share/icons/hicolor/scalable/apps/youdao-dict-born.png")
-    }    
+        String::from("/usr/share/icons/hicolor/scalable/apps/YDict/born.png")
+    }
+
+    pub fn clipboard_close_icon_path() -> String {
+        String::from("/usr/share/icons/hicolor/scalable/apps/YDict/close.png")
+    }
 }
