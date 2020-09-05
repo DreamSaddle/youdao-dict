@@ -52,6 +52,17 @@
 
 ## Installation Or Upgrade
 
+### archlinux(aur)
+
+```shell
+# 终端执行
+yay -S ydict
+```
+
+
+
+### 其他方式(手动安装)
+
 ```shell
 # 下载
 # 请自行前往Release下载最新版本
