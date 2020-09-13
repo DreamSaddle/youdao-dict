@@ -33,14 +33,9 @@
 
 
 
-## New In 0.3.0
+## New In 0.3.1
 
-+ 项目更名为 **YDict**
-+ 新增**段落**翻译
-
-+ 新增**划词**翻译
-+ 添加使用帮助
-+ UI稍作调整
++ :bug: 解决翻译特殊符号以及无网络闪退
 
 
 
@@ -66,19 +61,23 @@ yay -S ydict
 ```shell
 # 下载
 # 请自行前往Release下载最新版本
-wget https://github.com/DreamSaddle/youdao-dict/releases/download/0.3.0/YDict-0.3.0.tar.gz
+wget https://github.com/DreamSaddle/youdao-dict/releases/download/0.3.1/YDict-0.3.1.tar.gz
 
 # 解压
-tar -zxvf YDict-0.3.0.tar.gz
+tar -zxvf YDict-0.3.1.tar.gz
 
 # 安装/更新
-cd YDict-0.3.0/scripts
+cd YDict-0.3.1/scripts
 sudo chmod +x install.sh
 ./install.sh
 
 # 执行完成即安装完成
 # 可在启动器 工具 类目中查看启动, 或直接终端运行
 YDict
+
+# 卸载
+# 你可以单独获取项目 scripts目录中的 uninstall.sh执行卸载
+
 ```
 
 
