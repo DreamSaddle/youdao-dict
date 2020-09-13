@@ -7,13 +7,9 @@
 use std::rc::Rc;
 
 use cpp_core::{NullPtr, Ptr, StaticUpcast,};
-use qt_core::{qs, SlotNoArgs, QBox, slot, QObject, QFlags, AlignmentFlag, TextInteractionFlag};
+use qt_core::{qs, QBox, QObject, QFlags, AlignmentFlag, TextInteractionFlag};
 use qt_widgets::{QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLayoutItem};
 
-use crate::gui::{
-    startQt::MainWindowWidgets,
-    result::transResult::{TransResult},
-};
 use crate::structs;
 
 

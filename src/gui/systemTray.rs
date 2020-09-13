@@ -1,7 +1,7 @@
 
 use std::rc::Rc;
 
-use cpp_core::{NullPtr, Ptr, StaticUpcast};
+use cpp_core::{Ptr, StaticUpcast};
 use qt_core::{QCoreApplication, qs, SlotNoArgs, QBox, QPtr, slot, QObject};
 use qt_widgets::{QMainWindow, QAction, QMenu, QSystemTrayIcon, SlotOfActivationReason, q_system_tray_icon::ActivationReason};
 use qt_gui::{QIcon};

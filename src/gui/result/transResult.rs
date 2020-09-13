@@ -5,8 +5,7 @@
 
 use std::rc::Rc;
 
-use cpp_core::{NullPtr, Ptr, StaticUpcast};
-use qt_core::{qs, SlotNoArgs, QBox, slot, QObject, QFlags, AlignmentFlag};
+use qt_core::{QBox, QFlags, AlignmentFlag};
 use qt_widgets::{QWidget, QVBoxLayout};
 
 

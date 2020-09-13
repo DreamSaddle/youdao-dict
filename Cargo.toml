@@ -1,6 +1,6 @@
 [package]
 name = "YDict"
-version = "0.2.1"
+version = "0.3.1"
 authors = ["DreamSaddle"]
 edition = "2018"
 

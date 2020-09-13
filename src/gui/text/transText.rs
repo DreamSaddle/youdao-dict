@@ -4,7 +4,7 @@
 
 use std::rc::Rc;
 
-use cpp_core::{NullPtr, Ptr, StaticUpcast};
+use cpp_core::{Ptr, StaticUpcast};
 use qt_core::{qs, SlotNoArgs, QBox, slot, QObject, ShortcutContext, QFlags, AlignmentFlag};
 use qt_widgets::{QWidget, QVBoxLayout, QHBoxLayout, QTextEdit, QShortcut};
 use qt_gui::{QKeySequence};
@@ -156,7 +156,11 @@ impl TransText {
     /// 英译中
     /// 
     unsafe fn yd_request_result_handle_en_to_zh(self: &Rc<Self>, yd_result: &String, mww: &Rc<MainWindowWidgets>) {
-        let resultObj: structs::engConciseInfo::EngConciseInfo = serde_json::from_str(&yd_result).unwrap();
+        let r:Result<structs::engConciseInfo::EngConciseInfo, serde_json::Error> = serde_json::from_str(&yd_result);
+        if !r.is_ok() {
+            return;
+        }
+        let resultObj: structs::engConciseInfo::EngConciseInfo = r.unwrap();
         let _pronounce = mww.transResult.pronounce.clone();
         //解析且展示翻译结果
         Pronounce::full_en_to_zh_trans_result(&_pronounce, &resultObj, mww);
@@ -167,7 +171,11 @@ impl TransText {
     /// 中译英
     /// 
     unsafe fn yd_request_result_handle_zh_to_eng(self: &Rc<Self>, yd_result: &String, mww: &Rc<MainWindowWidgets>) {
-        let resultObj: structs::zhConciseInfo::ZhConciseInfo = serde_json::from_str(&yd_result).unwrap();
+        let r:Result<structs::zhConciseInfo::ZhConciseInfo, serde_json::Error> = serde_json::from_str(&yd_result);
+        if !r.is_ok() {
+            return;
+        }
+        let resultObj: structs::zhConciseInfo::ZhConciseInfo = r.unwrap();
         let _pronounce = mww.transResult.pronounce.clone();
         //解析且展示翻译结果
         Pronounce::full_zh_to_en_trans_result(&_pronounce, &resultObj, mww);
@@ -179,7 +187,11 @@ impl TransText {
     /// 包含网络释义, 短语
     /// 
     unsafe fn yd_request_full_result_handle(self: &Rc<Self>, yd_full_result: &String, mww: &Rc<MainWindowWidgets>) {
-        let result: serde_json::Value = serde_json::from_str(&yd_full_result).unwrap();
+        let r:Result<serde_json::Value, serde_json::Error> = serde_json::from_str(&yd_full_result);
+        if !r.is_ok() {
+            return;
+        }
+        let result: serde_json::Value = r.unwrap();
         let john = json!(result["web_trans"]["web-translation"]);
         // println!("{:?}", john);
         

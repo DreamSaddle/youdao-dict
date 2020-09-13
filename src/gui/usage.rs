@@ -35,7 +35,9 @@ impl Usage {
             do_tran_desc.set_word_wrap(true);
             vbox.add_widget(&do_tran_desc);
 
-            let other_desc = QLabel::from_q_string(&qs("其他说明： 音标发音间隔时间为1s，翻译执行间隔时间为1s"));
+            let other_desc = QLabel::from_q_string(&qs("其他说明： 音标发音间隔时间为1s, 翻译执行间隔时间为1s, 如果翻译一个特殊字符, 比如 |,@, 本软件不会执行翻译"));
+            other_desc.adjust_size();
+            other_desc.set_word_wrap(true);
             vbox.add_widget(&other_desc);
             
             usage_dialog.set_window_title(&qs("如何使用"));

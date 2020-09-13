@@ -2,7 +2,7 @@
 use std::rc::Rc;
 
 use cpp_core::{Ptr, StaticUpcast};
-use qt_core::{qs, SlotNoArgs, QBox, QObject, QCoreApplication};
+use qt_core::{qs, QBox, QObject, QCoreApplication};
 use qt_widgets::{QApplication, QWidget, QMainWindow, QVBoxLayout, QScrollArea};
 use qt_gui::{QIcon};
 
@@ -12,7 +12,6 @@ use crate::gui::{
     opt::optLine::{OptLine},
     text::transText::{TransText},
     result::transResult::{TransResult},
-    result::pronounce::Pronounce,
     constants::Constants
 };
 

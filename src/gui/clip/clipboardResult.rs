@@ -5,14 +5,12 @@
 
 use std::rc::Rc;
 
-use cpp_core::{NullPtr, Ptr, StaticUpcast};
+use cpp_core::{Ptr, StaticUpcast};
 use qt_core::{qs, SlotNoArgs, QBox, slot, QObject, QFlags, AlignmentFlag, TextInteractionFlag, QCoreApplication};
 use qt_widgets::{QWidget, QVBoxLayout, QHBoxLayout, QLabel, q_box_layout::Direction, QPushButton};
 use qt_gui::{QIcon};
 
 use crate::gui::{
-    startQt::{MainWindowWidgets},
-    result::transResult::{TransResult},
     constants::Constants,
     runtimeState::LastOptTime,
 };

@@ -5,7 +5,7 @@
 use std::rc::Rc;
 
 use cpp_core::{Ptr, StaticUpcast};
-use qt_core::{qs, slot, SlotNoArgs, QBox, ShortcutContext, QObject};
+use qt_core::{qs, SlotNoArgs, QBox, ShortcutContext, QObject};
 use qt_widgets::{QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QComboBox, QShortcut};
 use qt_gui::{QKeySequence};
 

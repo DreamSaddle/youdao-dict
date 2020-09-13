@@ -6,14 +6,10 @@
 
 use std::rc::Rc;
 
-use cpp_core::{NullPtr, Ptr, StaticUpcast,};
-use qt_core::{qs, SlotNoArgs, QBox, slot, QObject, QFlags, TextInteractionFlag};
+use cpp_core::{Ptr, StaticUpcast,};
+use qt_core::{qs, QBox, QObject, QFlags, TextInteractionFlag};
 use qt_widgets::{QWidget, QVBoxLayout, QLabel};
 
-use crate::gui::{
-    startQt::MainWindowWidgets,
-    result::transResult::{TransResult},
-};
 use crate::structs;
 
 

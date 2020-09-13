@@ -1,5 +1,7 @@
 
-use std::path::{Path, PathBuf};
+use cpp_core::NullPtr;
+use qt_core::{qs};
+use qt_widgets::{QMessageBox};
 use std::io::prelude::*;
 use tempfile::NamedTempFile;
 
@@ -18,12 +20,19 @@ pub fn do_concise_get(q: &String) -> String {
     url.push_str(&dicts_encoded);
 
     let r = futures::executor::block_on(do_get(&url));
-    let result = match &r {
-        String => r.ok().unwrap(),
-        Error => "".to_string(),
-    };
-
-    result.to_string()
+    if r.is_ok() {
+        let result = match &r {
+            String => r.ok().unwrap(),
+            Error => "".to_string(),
+        };
+    
+        return result.to_string();
+    }
+    
+    unsafe {
+        QMessageBox::warning_q_widget2_q_string(NullPtr, &qs("温馨提示"), &qs("请求失败, 请检查网络连接"));
+    }
+    return String::from("");
 }
 
 
@@ -41,12 +50,18 @@ pub fn do_full_get(q: &String) -> String {
     url.push_str(&dicts_encoded);
 
     let r = futures::executor::block_on(do_get(&url));
-    let result = match &r {
-        String => r.ok().unwrap(),
-        Error => "".to_string(),
-    };
-
-    result.to_string()
+    if  r.is_ok() {
+        let result = match &r {
+            String => r.ok().unwrap(),
+            Error => "".to_string(),
+        };
+    
+        return result.to_string();
+    }
+    unsafe {
+        QMessageBox::warning_q_widget2_q_string(NullPtr, &qs("温馨提示"), &qs("请求失败, 请检查网络连接"));
+    }
+    return String::from("");
 }
 
 async fn do_get(url: &String) -> Result<String, reqwest::Error> {
