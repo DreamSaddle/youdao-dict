@@ -41,7 +41,13 @@
 
 ## Full Changelog
 
-* [Available Here](CHANGELOG.md)
+[Available Here](CHANGELOG.md)
+
+
+
+## Help
+
+[See the help](HELP.md)
 
 
 
