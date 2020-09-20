@@ -58,6 +58,13 @@
 ```shell
 # 终端执行
 yay -S ydict
+
+# 升级注意
+通过aur的方式安装其实也是下载release文件之后通过 install.sh 脚本进行安装,所以在升级 YDict 时不能通过 pamac-manager(Discover之类的应用商店) 进行更新,因为 install.sh 脚本会要求输入root账户密码,而此类软件不能输入密码,所以会安装失败
+
+# 正确的升级方式, 请使用下面命令, 你也可以选择性进行升级
+# 在终端中执行升级是可以输入root账户密码的
+yay -Syu
 ```
 
 
@@ -102,7 +109,7 @@ YDict
 
 ### 划词翻译
 
-首先安装好**YDict**, 接着你需要在系统中为YDict的划词功能配置一个全局快捷键, 此快捷键测命令为 `YDict clipboard`
+首先安装好**YDict**, 接着你需要在系统中为YDict的划词功能配置一个全局快捷键, 此快捷键的命令为 `YDict clipboard`
 
 例如:
 
