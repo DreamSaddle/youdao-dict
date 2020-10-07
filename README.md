@@ -33,9 +33,9 @@
 
 
 
-## New In 0.3.1
+## New In 0.3.2
 
-+ :bug: 解决翻译特殊符号以及无网络闪退
++ :sparkles: 划词翻译增加点击其他窗口时自动关闭翻译窗口​
 
 
 
@@ -60,7 +60,9 @@
 yay -S ydict
 
 # 升级注意
-通过aur的方式安装其实也是下载release文件之后通过 install.sh 脚本进行安装,所以在升级 YDict 时不能通过 pamac-manager(Discover之类的应用商店) 进行更新,因为 install.sh 脚本会要求输入root账户密码,而此类软件不能输入密码,所以会安装失败
+# 通过aur的方式安装其实也是下载release文件之后通过 install.sh 脚本进行安装,
+# 所以在升级 YDict 时不能通过 pamac-manager(Discover之类的应用商店) 进行更新,
+# 因为 install.sh 脚本会要求输入root账户密码,而此类软件不能输入密码,所以会安装失败
 
 # 正确的升级方式, 请使用下面命令, 你也可以选择性进行升级
 # 在终端中执行升级是可以输入root账户密码的

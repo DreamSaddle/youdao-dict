@@ -1,8 +1,8 @@
 
 use std::rc::Rc;
 
-use cpp_core::{Ptr};
-use qt_core::{qs, QFlags, WindowType, AlignmentFlag};
+use cpp_core::{Ptr, StaticUpcast};
+use qt_core::{qs, SlotNoArgs, QFlags, QCoreApplication, QObject, WindowType, AlignmentFlag};
 use qt_widgets::{QApplication, QWidget, QVBoxLayout};
 use qt_gui::{QCursor, QGuiApplication};
 use regex::Regex;
@@ -22,14 +22,21 @@ pub struct ClipBoard {
     pub phraseResult: Rc<ClipboardPhrase>,
 }
 
+impl StaticUpcast<QObject> for ClipBoard {
+    unsafe fn static_upcast(ptr: Ptr<Self>) -> Ptr<QObject> {
+        ptr.widget.static_upcast()
+    }
+}
+
+
 ///
 /// 模拟Ctrl+C
 /// 
 fn simulation_copy() {
-    std::thread::sleep(std::time::Duration::from_millis(99));
+    std::thread::sleep(std::time::Duration::from_millis(50));
     LControlKey.press();
     CKey.press();
-    std::thread::sleep(std::time::Duration::from_millis(99));
+    std::thread::sleep(std::time::Duration::from_millis(50));
     CKey.release();
     LControlKey.release();
 }
@@ -44,49 +51,63 @@ impl ClipBoard {
 
                 let clipboard= QGuiApplication::clipboard();
                 let clipboard_word = clipboard.text().to_std_string();
-                let point = QCursor::pos_0a();
 
 
                 let base_result = ClipboardResult::new();
                 let phrase_result = ClipboardPhrase::new();
 
-                let widget = QWidget::new_0a();
+                let contentWidget = QWidget::new_0a();
 
-                let v_box = QVBoxLayout::new_1a(&widget);
+                let v_box = QVBoxLayout::new_1a(&contentWidget);
                 v_box.add_widget_3a(&base_result.widget, 0, QFlags::from(AlignmentFlag::AlignTop));
                 v_box.add_widget_3a(&phrase_result.widget, 0, QFlags::from(AlignmentFlag::AlignTop));
                 
-                widget.set_window_flags(QFlags::from(WindowType::X11BypassWindowManagerHint | WindowType::WindowStaysOnTopHint));
-                widget.move_2a(point.x(), point.y());
-                widget.set_style_sheet(&qs("background-color:#54546c;"));
-                widget.set_minimum_width(300);
-                widget.set_minimum_height(150);
-
+                contentWidget.set_window_flags(QFlags::from(WindowType::FramelessWindowHint));
+                contentWidget.set_style_sheet(&qs("background-color:#54546c;"));
+                contentWidget.set_minimum_width(300);
+                contentWidget.set_minimum_height(150);
+                
                 let this = Rc::new(ClipBoard {
-                    widget: widget.as_ptr(),
+                    widget: contentWidget.as_ptr(),
                     baseResult: base_result,
                     phraseResult: phrase_result,
                 });
                 
                 this.do_request(&clipboard_word);
-                widget.show();
-
-                //屏幕边缘检测
-                let desktop = QApplication::desktop();
-                let desk_rect = desktop.available_geometry();
-                if point.x() + widget.width() > desk_rect.width() - 10 {
-                    widget.move_2a(point.x() - (point.x() + widget.width() - desk_rect.width() - 10), widget.y());
-                }
-                if point.y() + widget.height() > desk_rect.height() - 10 {
-                    widget.move_2a( widget.x(), point.y() - (point.y() + widget.height() - desk_rect.height() - 10));
-                }
+                this.detection_screen_margin();
+                contentWidget.show();
+                
+                // 应用状态改变监听, 目前此事件主要作用于 鼠标点击翻译窗口外部自动关闭翻译窗口(包括Alt+Tab切换窗口也会), 只要翻译创建不是激活窗口就自动关闭
+                app.application_state_changed().connect(&SlotNoArgs::new(app, move || {
+                    if contentWidget.is_active_window() {
+                        QCoreApplication::exit_0a();
+                    }
+                }));
 
                 QApplication::exec()
             });
             
         }
     }
+    
 
+    ///
+    /// 屏幕边缘检测
+    /// 
+    unsafe fn detection_screen_margin(self: &Rc<Self>) {
+        let point = QCursor::pos_0a();
+        let desktop = QApplication::desktop();
+        let desk_rect = desktop.available_geometry();
+        let mut x = point.x();
+        let mut y = point.y();
+        if x + self.widget.width() > desk_rect.width() - 10 {
+            x = x - (x + self.widget.width() - desk_rect.width() - 10);
+        }
+        if y + self.widget.height() > desk_rect.height() - 10 {
+            y = y - (y + self.widget.height() - desk_rect.height() - 10);
+        }
+        self.widget.move_2a(x, y);
+    }
 
     ///
     /// 翻译请求发送
