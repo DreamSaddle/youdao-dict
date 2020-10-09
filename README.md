@@ -76,13 +76,13 @@ yay -Syu
 ```shell
 # 下载
 # 请自行前往Release下载最新版本
-wget https://github.com/DreamSaddle/youdao-dict/releases/download/0.3.1/YDict-0.3.1.tar.gz
+wget https://github.com/DreamSaddle/youdao-dict/releases/download/0.3.2/YDict-0.3.2.tar.gz
 
 # 解压
-tar -zxvf YDict-0.3.1.tar.gz
+tar -zxvf YDict-0.3.2.tar.gz
 
 # 安装/更新
-cd YDict-0.3.1/scripts
+cd YDict-0.3.2/scripts
 sudo chmod +x install.sh
 ./install.sh
 
